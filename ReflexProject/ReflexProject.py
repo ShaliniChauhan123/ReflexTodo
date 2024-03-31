@@ -2,7 +2,7 @@ import reflex as rx
 
 
 class State(rx.State):
-    todos: list = ["hey let's start creating your todos----"]
+    todos: list = ["Learning"]
 
     def add_todo(self,  form_data: dict[str, str]):
         new_item = form_data.get("new_item")
@@ -20,9 +20,12 @@ def todo_list(state):
             state.todos,
             lambda todo: rx.hstack(
                 rx.heading(todo, font_size="1.2em"),
-                rx.button("Delete", on_click=lambda: state.remove_todo(todo))
+                rx.button("Delete", on_click=lambda: state.remove_todo(todo)),
+                style={"justify-content":"space-between"} ,
+                width="100%"
             ),
-            spacing="1"
+            spacing="1",
+            
         ),
         rx.text("No todos yet.")
     )
@@ -54,12 +57,20 @@ def todo_input():
 
 
 def index():
-    return rx.vstack(
+    return rx.center(
+        rx.vstack(
         rx.heading("Welcome to Reflex Todo App!", size="3"),
         todo_input(),
         todo_list(State),
-        spacing="2"
+        spacing="2",
+        style={"margin": "60px","width":"50%"}  #
     )
+    
+    )
+
+    
+    
+    
 
 
 app = rx.App()
