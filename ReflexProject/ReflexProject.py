@@ -19,7 +19,11 @@ def todo_list(state):
         rx.foreach(
             state.todos,
             lambda todo: rx.hstack(
-                rx.checkbox(rx.heading(todo, font_size="1.2em",color_scheme="blue")),
+                rx.flex(
+                    rx.checkbox(name="completed", value="false",style={"padding-right":"12px"}),  
+                rx.heading(todo, font_size="1.2em",color_scheme="blue"),
+                style={"align-items":"center","justify-content":"center"}
+                ),
                 rx.button("Delete", on_click=lambda: state.remove_todo(todo),color_scheme="ruby"),
                 style={"justify-content":"space-between"} ,
                 width="100%"
