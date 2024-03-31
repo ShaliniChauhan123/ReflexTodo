@@ -1,16 +1,26 @@
+from typing import List, Dict
+
 import reflex as rx
 
 
 class State(rx.State):
-    todos: list = ["Learning"]
+    todos: List[Dict[str, str]] = [{"text": "Learning", "completed": False}]
 
-    def add_todo(self,  form_data: dict[str, str]):
+    def add_todo(self, form_data: dict[str, str]):
         new_item = form_data.get("new_item")
         if new_item:
-            self.todos.append(new_item)
+            self.todos.append({"text": new_item, "completed": False})
 
     def remove_todo(self, todo):
         self.todos.remove(todo)
+
+    def toggle_completed(self, todo):
+        # Find the index of the todo item in the list
+        for idx, item in enumerate(self.todos):
+            if item == todo:
+                # Toggle the completion status
+                self.todos[idx]["completed"] = not self.todos[idx]["completed"]
+                break
 
 
 def todo_list(state):
@@ -20,16 +30,24 @@ def todo_list(state):
             state.todos,
             lambda todo: rx.hstack(
                 rx.flex(
-                    rx.checkbox(name="completed", value="false",style={"padding-right":"12px"}),  
-                rx.heading(todo, font_size="1.2em",color_scheme="blue"),
-                style={"align-items":"center","justify-content":"center"}
+                    rx.checkbox(
+                        name="completed",
+                        value=todo["completed"],
+                        on_change=lambda value: state.toggle_completed(todo),
+                        style={"padding-right": "12px"}
+                    ),
                 ),
-                rx.button("Delete", on_click=lambda: state.remove_todo(todo),color_scheme="ruby"),
-                style={"justify-content":"space-between"} ,
+                rx.cond(
+    todo["completed"],
+    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue", style={"text-decoration": "line-through"}),
+    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue")
+)
+,
+                rx.button("Delete", on_click=lambda: state.remove_todo(todo), color_scheme="ruby"),
+                style={"justify-content": "space-between"},
                 width="100%"
             ),
             spacing="1",
-            
         ),
         rx.text("No todos yet.")
     )
@@ -55,22 +73,16 @@ def todo_input():
     )
 
 
-
 def index():
     return rx.center(
         rx.vstack(
-        rx.heading("Welcome to Reflex Todo App!", size="6",style={"padding-bottom":"24px"}),
-        todo_input(),
-        todo_list(State),
-        spacing="2",
-        style={"margin": "60px","width":"50%"}  
+            rx.heading("Welcome to Reflex Todo App!", size="6", style={"padding-bottom": "24px"}),
+            todo_input(),
+            todo_list(State),
+            spacing="2",
+            style={"margin": "60px", "width": "50%"}
+        )
     )
-    
-    )
-
-    
-    
-    
 
 
 app = rx.App()
