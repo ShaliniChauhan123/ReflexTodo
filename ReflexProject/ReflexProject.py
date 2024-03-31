@@ -20,7 +20,7 @@ def todo_list(state):
             state.todos,
             lambda todo: rx.hstack(
                 rx.heading(todo, font_size="1.2em"),
-                rx.button("Delete", on_click=lambda: state.remove_todo(todo)),
+                rx.button("Delete", on_click=lambda: state.remove_todo(todo),color_scheme="ruby"),
                 style={"justify-content":"space-between"} ,
                 width="100%"
             ),
@@ -44,6 +44,7 @@ def todo_input():
                     name="new_item",
                     placeholder="Add a todo...",
                     bg="white",
+                    style={"border": "1px solid #007bff"}
                 ),
                 width="100%",
             ),
