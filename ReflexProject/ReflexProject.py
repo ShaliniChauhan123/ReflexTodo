@@ -19,7 +19,7 @@ def todo_list(state):
         rx.foreach(
             state.todos,
             lambda todo: rx.hstack(
-                rx.heading(todo, font_size="1.2em"),
+                rx.heading(todo, font_size="1.2em",color_scheme="blue"),
                 rx.button("Delete", on_click=lambda: state.remove_todo(todo),color_scheme="ruby"),
                 style={"justify-content":"space-between"} ,
                 width="100%"
@@ -64,7 +64,7 @@ def index():
         todo_input(),
         todo_list(State),
         spacing="2",
-        style={"margin": "60px","width":"50%"}  #
+        style={"margin": "60px","width":"50%"}  
     )
     
     )
