@@ -12,16 +12,21 @@ class State(rx.State):
     def remove_todo(self, todo):
         self.todos.remove(todo)
 
+
 def todo_list(state):
     return rx.cond(
         state.todos,
         rx.foreach(
             state.todos,
-            lambda todo: rx.heading(todo, font_size="1.2em"),
+            lambda todo: rx.hstack(
+                rx.heading(todo, font_size="1.2em"),
+                rx.button("Delete", on_click=lambda: state.remove_todo(todo))
+            ),
             spacing="1"
         ),
         rx.text("No todos yet.")
     )
+
 
 def handle_add_todo_click(state, text_input):
     todo_text = text_input.get_value("value")
