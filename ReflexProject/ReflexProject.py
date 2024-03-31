@@ -60,7 +60,7 @@ def todo_input():
 def index():
     return rx.center(
         rx.vstack(
-        rx.heading("Welcome to Reflex Todo App!", size="3"),
+        rx.heading("Welcome to Reflex Todo App!", size="6",style={"padding-bottom":"24px"}),
         todo_input(),
         todo_list(State),
         spacing="2",
