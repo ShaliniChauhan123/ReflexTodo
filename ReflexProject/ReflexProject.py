@@ -19,7 +19,7 @@ def todo_list(state):
         rx.foreach(
             state.todos,
             lambda todo: rx.hstack(
-                rx.heading(todo, font_size="1.2em",color_scheme="blue"),
+                rx.checkbox(rx.heading(todo, font_size="1.2em",color_scheme="blue")),
                 rx.button("Delete", on_click=lambda: state.remove_todo(todo),color_scheme="ruby"),
                 style={"justify-content":"space-between"} ,
                 width="100%"
@@ -30,11 +30,6 @@ def todo_list(state):
         rx.text("No todos yet.")
     )
 
-
-def handle_add_todo_click(state, text_input):
-    todo_text = text_input.get_value("value")
-    if todo_text is not None:
-        state.add_todo(todo_text)
 
 def todo_input():
     return rx.form(
