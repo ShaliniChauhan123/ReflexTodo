@@ -39,7 +39,8 @@ def todo_list(state):
                 ),
                 rx.cond(
     todo["completed"],
-    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue", style={"text-decoration": "line-through"}),
+    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue", style={"text-decoration": "line-through",  "text-decoration-color": "red",
+            "font-weight": "bold","text-decoration-thickness": "2.5px"}),
     rx.heading(todo["text"], font_size="1.2em", color_scheme="blue")
 )
 ,
