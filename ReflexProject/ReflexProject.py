@@ -83,7 +83,7 @@ def index():
             todo_input(),
             todo_list(State),
             spacing="2",
-            style={"margin": "60px", "width": "50%"}
+            style={"margin": "60px", "width": "50%","padding":"36px", "border-radius":"12px","background-color":"rgba(237, 231, 225)"}
         )
     )
 
