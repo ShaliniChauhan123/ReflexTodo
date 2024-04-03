@@ -36,21 +36,19 @@ def todo_list(state):
                         on_change=lambda value: state.toggle_completed(todo),
                         style={"padding-right": "12px"}
                     ),
-                                    rx.cond(
-    todo["completed"],
-    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue", style={"text-decoration": "line-through",  "text-decoration-color": "red",
-            "font-weight": "bold","text-decoration-thickness": "2.5px"}),
-    rx.heading(todo["text"], font_size="1.2em", color_scheme="blue")
-)
+                   rx.cond(
+                         todo["completed"],
+                         rx.heading(todo["text"], font_size="1.2em", color_scheme="blue", style={"text-decoration": "line-through",  "text-decoration-color": "red",
+                                     "font-weight": "bold","text-decoration-thickness": "2.5px"}),
+                         rx.heading(todo["text"], font_size="1.2em", color_scheme="blue")
+                        )
 ,
-              style={"align-items":"center", "justify-content":"center"},
+                style={"align-items":"center", "justify-content":"center"},
    
                 ),
-             rx.button("Delete", on_click=lambda: state.remove_todo(todo), color_scheme="ruby"),
-              style={"justify-content": "space-between"},
-                width="100%"
-            ),
-            spacing="1",
+                   rx.button("Delete", on_click=lambda: state.remove_todo(todo), color_scheme="ruby"), style={"justify-content": "space-between"},width="100%"
+                ),
+             spacing="1",
         ),
         rx.text("No todos yet.")
     )
