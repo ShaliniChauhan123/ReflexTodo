@@ -1,5 +1,7 @@
 from typing import List, Dict
 
+from .pages.login import login
+
 import reflex as rx
 
 
@@ -86,5 +88,11 @@ def index():
     )
 
 
+async def api_test(item_id: int):
+    return {"my_result": item_id}
+
+
 app = rx.App()
+app.api.add_api_route("/items/{item_id}", api_test)
 app.add_page(index)
+app.add_page(login)
