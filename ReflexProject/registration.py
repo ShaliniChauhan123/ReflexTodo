@@ -10,7 +10,7 @@ from sqlmodel import select
 
 from .base_state import State
 # from .login import LOGIN_ROUTE, REGISTER_ROUTE
-# from .user import User
+from .user import User
 
 
 class RegistrationState(State):
@@ -36,15 +36,15 @@ class RegistrationState(State):
                 self.error_message = "Email cannot be empty"
                 yield rx.set_focus("email_id")
                 return
-            existing_user = session.exec(
-                select(User).where(User.email_id == email_id)
-            ).one_or_none()
-            if existing_user is not None:
-                self.error_message = (
-                    f"email_id {email_id} is already registered. Try a different email_id"
-                )
-                yield [rx.set_value("email_id", ""), rx.set_focus("email_id")]
-                return
+            # existing_user = session.exec(
+            #     select(User).where(User.email_id == email_id)
+            # ).one_or_none()
+            # if existing_user is not None:
+            #     self.error_message = (
+            #         f"email_id {email_id} is already registered. Try a different email_id"
+            #     )
+            #     yield [rx.set_value("email_id", ""), rx.set_focus("email_id")]
+            #     return
             password = form_data["password"]
             if not password:
                 self.error_message = "Password cannot be empty"
@@ -58,17 +58,25 @@ class RegistrationState(State):
             #     ]
             #     return
             # Create the new user and add it to the database.
-        #     new_user = User()  # type: ignore
-        #     new_user.email_id = email_id
-        #     new_user.password_hash = User.hash_password(password)
-        #     new_user.enabled = True
-        #     session.add(new_user)
-        #     session.commit()
-        # # Set success and redirect to login page after a brief delay.
-        # self.error_message = ""
-        # self.success = True
-        # yield
-        # await asyncio.sleep(0.5)
+            new_user = User()  # type: ignore
+            new_user.email_id = email_id
+            new_user.password_hash = User.hash_password(password)
+            new_user.enabled = True
+            print('checl',new_user)
+            all_users = session.query(User).all()
+
+# Print the details of each user
+            for user in all_users:
+                print(f"User ID: {user.id}, Email: {user.email_id}")
+
+
+            session.add(new_user)
+            session.commit()
+        # Set success and redirect to login page after a brief delay.
+        self.error_message = ""
+        self.success = True
+        yield
+        await asyncio.sleep(0.5)
         yield [rx.redirect("/login"), RegistrationState.set_success(False)]
 
 @rx.page(route="/register")
