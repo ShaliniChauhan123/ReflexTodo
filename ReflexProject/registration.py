@@ -9,7 +9,6 @@ import reflex as rx
 from sqlmodel import select
 
 from .base_state import State
-# from .login import LOGIN_ROUTE, REGISTER_ROUTE
 from .user import User
 
 
@@ -44,11 +43,11 @@ class RegistrationState(State):
                 return
           
             # Create the new user and add it to the database.
-            new_user = User()  # type: ignore
+            new_user = User() 
             new_user.email_id = email_id
             new_user.password_hash = User.hash_password(password)
             new_user.enabled = True
-            print('checl',new_user)
+            print('check new user',new_user)
             all_users = session.query(User).all()
 
             # Print the details of each user
@@ -61,8 +60,8 @@ class RegistrationState(State):
         # Set success and redirect to login page after a brief delay.
         self.error_message = ""
         self.success = True
-        yield
-        await asyncio.sleep(0.5)
+        # The Yield used for returning a list of values while using return will return only single value
+        yield await asyncio.sleep(0.5)
         yield [rx.redirect("/login"), RegistrationState.set_success(False)]
 
 @rx.page(route="/register")
