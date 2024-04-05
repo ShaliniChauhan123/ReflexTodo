@@ -1,6 +1,7 @@
 from typing import List, Dict
 
-from .pages.login import login
+from .pages.login import require_login
+
 from .registration import registration_page as registration_page
 
 import reflex as rx
@@ -77,7 +78,7 @@ def todo_input():
         width="100%",
     )
 
-
+@require_login
 def index():
     return rx.center(
         rx.vstack(
@@ -98,6 +99,6 @@ app = rx.App()
 app.api.add_api_route("/items/{item_id}", api_test)
 # app.api.add_api_route("/register", api_test)
 app.add_page(index)
-app.add_page(login)
-app.add_page(registration_page)
+# app.add_page(login)
+# app.add_page(registration_page)
 
