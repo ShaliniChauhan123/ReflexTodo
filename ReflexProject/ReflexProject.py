@@ -7,26 +7,6 @@ from .registration import registration_page as registration_page
 import reflex as rx
 from .base_state import State
 
-# class State(rx.State):
-#     todos: List[Dict[str, str]] = [{"text": "Learning", "completed": False}]
-
-#     def add_todo(self, form_data: dict[str, str]):
-#         new_item = form_data.get("new_item")
-#         if new_item:
-#             self.todos.append({"text": new_item, "completed": False})
-
-#     def remove_todo(self, todo):
-#         self.todos.remove(todo)
-
-#     def toggle_completed(self, todo):
-#         # Find the index of the todo item in the list
-#         for idx, item in enumerate(self.todos):
-#             if item == todo:
-#                 # Toggle the completion status
-#                 self.todos[idx]["completed"] = not self.todos[idx]["completed"]
-#                 break
-
-
 
 def todo_list(state):
     return rx.cond(
