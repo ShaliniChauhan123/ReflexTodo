@@ -77,8 +77,8 @@ async def api_test(item_id: int):
 
 app = rx.App()
 app.api.add_api_route("/items/{item_id}", api_test)
-# app.api.add_api_route("/register", api_test)
+# for testing backend server as it is also running in localhost:8000
+app.api.add_api_route("/register", api_test)
 app.add_page(index)
-# app.add_page(login)
-# app.add_page(registration_page)
+
 
