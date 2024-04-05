@@ -22,14 +22,6 @@ class RegistrationState(State):
     async def handle_registration(
         self, form_data
     ): 
-    # -> AsyncGenerator[rx.event.EventSpec | list[rx.event.EventSpec] | None, None]:
-        """Handle registration form on_submit.
-
-        Set error_message appropriately based on validation results.
-
-        Args:
-            form_data: A dict of form fields and values.
-        """
         with rx.session() as session:
             email_id = form_data["email_id"]
             if not email_id:
@@ -50,13 +42,7 @@ class RegistrationState(State):
                 self.error_message = "Password cannot be empty"
                 yield rx.set_focus("password")
                 return
-            # if password != form_data["confirm_password"]:
-            #     self.error_message = "Passwords do not match"
-            #     yield [
-            #         rx.set_value("confirm_password", ""),
-            #         rx.set_focus("confirm_password"),
-            #     ]
-            #     return
+          
             # Create the new user and add it to the database.
             new_user = User()  # type: ignore
             new_user.email_id = email_id
@@ -65,7 +51,7 @@ class RegistrationState(State):
             print('checl',new_user)
             all_users = session.query(User).all()
 
-# Print the details of each user
+            # Print the details of each user
             for user in all_users:
                 print(f"User ID: {user.id}, Email: {user.email_id}")
 
@@ -136,26 +122,5 @@ def registration_page() -> rx.Component:
     )
 
     return rx.fragment(
-        # rx.text("welcomd")
         register_form
-        # rx.cond(
-        #     RegistrationState.success,
-        #     rx.vstack(
-        #         rx.text("Registration successful!"),
-        #         rx.chakra.spinner(),
-        #     ),
-        #     rx.vstack(
-        #         rx.cond(  # conditionally show error messages
-        #             RegistrationState.error_message != "",
-        #             rx.callout(
-        #                 RegistrationState.error_message,
-        #                 icon="alert_triangle",
-        #                 color_scheme="red",
-        #                 role="alert",
-        #             ),
-        #         ),
-        #         register_form,
-        #         padding_top="10vh",
-        #     ),
-        # )
     )
