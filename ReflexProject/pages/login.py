@@ -51,7 +51,7 @@ class LoginState(State):
         elif page == "/login":
             return rx.redirect(self.redirect_to or "/")
 
-
+@rx.page(route="/login")
 def login():
     return  rx.center(
    rx.vstack(
@@ -91,3 +91,30 @@ def login():
       style={"margin": "80px", "width": "50%","padding":"36px", "border-radius":"12px","background-color":"rgba(237, 231, 225)"}
 )
     )
+
+def require_login(page):
+    """Decorator to require authentication before rendering a page.
+
+    If the user is not authenticated, then redirect to the login page.
+
+    Args:
+        page: The page to wrap.
+
+    Returns:
+        The wrapped page component.
+    """
+
+    def protected_page():
+        return rx.fragment(
+            rx.cond(
+                State.is_hydrated & State.is_authenticated,  # type: ignore
+                page(),
+                rx.center(
+                    # When this spinner mounts, it will redirect to the login page
+                    rx.chakra.spinner(on_mount=LoginState.redir),
+                ),
+            )
+        )
+
+
+    return protected_page
