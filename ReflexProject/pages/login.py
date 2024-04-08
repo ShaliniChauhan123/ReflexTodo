@@ -22,9 +22,6 @@ class LoginState(State):
             user = session.exec(
                 select(User).where(User.email_id == email_id)
             ).one_or_none()
-        # if user is not None and not user.enabled:
-        #     self.error_message = "This account is disabled."
-        #     return rx.set_value("password", "")
         if user is None or not user.verify(password):
             self.error_message = "There was a problem logging in, please try again."
             return rx.set_value("password", "")
@@ -45,6 +42,7 @@ class LoginState(State):
             # wait until after hydration to ensure auth_token is known
             return LoginState.redir()  # type: ignore
         page = self.router.page.path
+        print("page",page)
         if not self.is_authenticated and page != "/login":
             self.redirect_to = page
             return rx.redirect("/login")
@@ -81,6 +79,7 @@ def login():
             
 
             rx.button("Login", style={"padding":"24px"}),
+                        rx.link("Signup", href="/register"),
             style={"flex-direction":"column","width":"100%"}
            )
         ),
@@ -103,9 +102,8 @@ def require_login(page):
     Returns:
         The wrapped page component.
     """
-
     def protected_page():
-        return rx.fragment(
+      return rx.fragment(
             rx.cond(
                 State.is_hydrated & State.is_authenticated,  # type: ignore
                 page(),
@@ -115,6 +113,6 @@ def require_login(page):
                 ),
             )
         )
-
-
+    protected_page.__name__=page.__name__ 
+    # added to change the name of protected_page name to index as it was protected_page pehle
     return protected_page
