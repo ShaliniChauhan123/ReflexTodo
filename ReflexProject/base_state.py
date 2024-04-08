@@ -13,6 +13,7 @@ import reflex as rx
 from .auth_session import AuthSession
 from .user import User
 from typing import List, Dict
+from .todo import Todo
 
 
 AUTH_TOKEN_LOCAL_STORAGE_KEY = "_auth_token"
@@ -23,11 +24,44 @@ class State(rx.State):
     # The auth_token is stored in local storage to persist across tab and browser sessions.
     auth_token: str = rx.LocalStorage(name=AUTH_TOKEN_LOCAL_STORAGE_KEY)
     todos: List[Dict[str, str]] = [{"text": "Learning", "completed": False}]
+    def print_userid():
+      print('userid', State.authenticated_user.id)
+
+    def print_error_message():
+       print('nooooooo')
+
 
     def add_todo(self, form_data: dict[str, str]):
         new_item = form_data.get("new_item")
+        user_id = self.authenticated_user.id
+        # rx.cond(self.is_authenticated, State.print_userid, State.print_error_message)
+        print("messs",user_id)
+        # result = session.exec(
+        #         select(User, AuthSession).where(
+        #             AuthSession.session_id == self.auth_token,
+        #             AuthSession.expiration
+        #             >= datetime.datetime.now(datetime.timezone.utc),
+        #             User.id == AuthSession.user_id,
+        #
+        #          ),
         if new_item:
+          with rx.session() as session:
+            
+            session.add(
+                Todo(  # type: ignore
+                    user_id=user_id,
+                    todo=new_item,
+                    is_completed=False
+                )
+            )
+            session.commit()
             self.todos.append({"text": new_item, "completed": False})
+        # rx.cond(self.is_authenticated, State.print_userid, State.print_error_message)
+        # if(State.is_authenticated):
+        #     user_id=self.authenticated_user.id
+        #     print('userid',user_id)
+            #   if new_item:
+            #       self.todos.append({"text": new_item, "completed": False})
 
     def remove_todo(self, todo):
         self.todos.remove(todo)
