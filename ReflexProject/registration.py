@@ -1,12 +1,7 @@
-"""New user registration form and validation logic."""
 from __future__ import annotations
-
 import asyncio
-from collections.abc import AsyncGenerator
-
 import reflex as rx
 
-from sqlmodel import select
 
 from .base_state import State
 from .user import User
@@ -27,15 +22,6 @@ class RegistrationState(State):
                 self.error_message = "Email cannot be empty"
                 yield rx.set_focus("email_id")
                 return
-            # existing_user = session.exec(
-            #     select(User).where(User.email_id == email_id)
-            # ).one_or_none()
-            # if existing_user is not None:
-            #     self.error_message = (
-            #         f"email_id {email_id} is already registered. Try a different email_id"
-            #     )
-            #     yield [rx.set_value("email_id", ""), rx.set_focus("email_id")]
-            #     return
             password = form_data["password"]
             if not password:
                 self.error_message = "Password cannot be empty"
@@ -47,7 +33,6 @@ class RegistrationState(State):
             new_user.email_id = email_id
             new_user.password_hash = User.hash_password(password)
             new_user.enabled = True
-            print('check new user',new_user)
             all_users = session.query(User).all()
 
             # Print the details of each user

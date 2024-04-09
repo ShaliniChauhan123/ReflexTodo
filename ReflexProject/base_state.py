@@ -54,7 +54,7 @@ class State(rx.State):
                 )
             )
             session.commit()
-            self.todos.append(                Todo(  # type: ignore
+            self.todos.append(Todo(  # type: ignore
                     user_id=user_id,
                     todo=new_item,
                     is_completed=False
@@ -80,7 +80,6 @@ class State(rx.State):
                         findTodo.is_completed=not findTodo.is_completed
                         session.add(findTodo)
                         session.commit()
-                        print("iddd",findTodo.id)
                         for idx, item in enumerate(self.todos):
                              if item == todo:
                                  self.todos[idx].is_completed = not self.todos[idx].is_completed
