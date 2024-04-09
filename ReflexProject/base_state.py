@@ -24,6 +24,21 @@ class State(rx.State):
     # The auth_token is stored in local storage to persist across tab and browser sessions.
     auth_token: str = rx.LocalStorage(name=AUTH_TOKEN_LOCAL_STORAGE_KEY)
     todos: List[Dict[str, str]] = [{"text": "Learning", "completed": False}]
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+        
+        # Initialize state variables
+        self.todos = []
+        self.load_todos()  
+
+    def load_todos(self):
+        # Fetch todos from the database
+        with rx.session() as session:
+            todos = session.exec(select(Todo)).all()
+            self.todos=todos
+            return todos
+
 
     def add_todo(self, form_data: dict[str, str]):
         new_item = form_data.get("new_item")
