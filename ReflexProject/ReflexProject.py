@@ -17,8 +17,8 @@ def todo_list():
             lambda todo: rx.hstack(
                 rx.flex(
                     rx.checkbox(
-                        name="completed",
-                        value=todo["is_completed"],
+                        name="is_completed",
+                        checked=todo["is_completed"],
                         on_change=lambda value: State.toggle_completed(todo),
                         style={"padding-right": "12px"}
                     ),
