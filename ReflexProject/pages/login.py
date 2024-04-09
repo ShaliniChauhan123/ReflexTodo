@@ -103,16 +103,20 @@ def require_login(page):
         The wrapped page component.
     """
     def protected_page():
-      return rx.fragment(
-            rx.cond(
-                State.is_hydrated & State.is_authenticated,  # type: ignore
-                page(),
-                rx.center(
-                    # When this spinner mounts, it will redirect to the login page
-                    rx.chakra.spinner(on_mount=LoginState.redir),
-                ),
+        return rx.cond(
+            State.is_hydrated & State.is_authenticated,
+            page(),
+            rx.center(
+                rx.cond(
+                    State.is_authenticated == False,
+                   login()
+                    ,
+                     rx.center(
+                        rx.chakra.spinner(on_mount=LoginState.redir)
+                    )
+                )
             )
         )
-    protected_page.__name__=page.__name__ 
-    # added to change the name of protected_page name to index as it was protected_page pehle
+
+    protected_page.__name__ = page.__name__ 
     return protected_page
