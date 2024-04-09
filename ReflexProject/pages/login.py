@@ -107,14 +107,9 @@ def require_login(page):
             State.is_hydrated & State.is_authenticated,
             page(),
             rx.center(
-                rx.cond(
-                    State.is_authenticated == False,
-                   login()
-                    ,
                      rx.center(
                         rx.chakra.spinner(on_mount=LoginState.redir)
                     )
-                )
             )
         )
 
