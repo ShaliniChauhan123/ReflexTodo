@@ -127,6 +127,7 @@ class State(rx.State):
                 session.delete(auth_session)
             session.commit()
         self.auth_token = self.auth_token
+        return rx.redirect("/login")
 
     def _login(
         self,
