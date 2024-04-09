@@ -1,5 +1,3 @@
-from typing import List, Dict
-
 from .pages.login import require_login
 
 from .registration import registration_page as registration_page
@@ -63,7 +61,9 @@ def todo_input():
 def index():
     return rx.center(
         rx.vstack(
-            rx.heading("Welcome to Reflex Todo App!", size="6", style={"padding-bottom": "24px"}),
+           rx.hstack(rx.heading("Welcome to Reflex Todo App!", size="6", style={"padding-bottom": "24px"}),
+           rx.button("Logout", on_click=lambda: State.do_logout), style={"justify-content": "space-between"},width="100%"
+          ),
             todo_input(),
             todo_list(),
             spacing="2",
