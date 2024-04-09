@@ -23,7 +23,7 @@ DEFAULT_AUTH_SESSION_EXPIRATION_DELTA = datetime.timedelta(days=7)
 class State(rx.State):
     # The auth_token is stored in local storage to persist across tab and browser sessions.
     auth_token: str = rx.LocalStorage(name=AUTH_TOKEN_LOCAL_STORAGE_KEY)
-    todos: List[Dict[str, str]] = [{"text": "Learning", "completed": False}]
+    todos: List[Dict[str, bool]] 
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs) 
@@ -40,7 +40,7 @@ class State(rx.State):
             return todos
 
 
-    def add_todo(self, form_data: dict[str, str]):
+    def add_todo(self, form_data: dict[str, bool]):
         new_item = form_data.get("new_item")
         user_id = self.authenticated_user.id
         if new_item:
@@ -70,15 +70,22 @@ class State(rx.State):
             if(removeTodo):
                  session.delete(removeTodo)
                  session.commit()
-            self.todos.remove(todo)
+                 self.todos.remove(todo)
 
     def toggle_completed(self, todo):
-        # Find the index of the todo item in the list
-        for idx, item in enumerate(self.todos):
-            if item == todo:
                 # Toggle the completion status
-                self.todos[idx]["completed"] = not self.todos[idx]["completed"]
-                break
+                with rx.session() as session:
+                    findTodo=session.exec(select(Todo).where(Todo.todo==todo["todo"])).first()
+                    if(findTodo):
+                        findTodo.is_completed=not findTodo.is_completed
+                        session.add(findTodo)
+                        session.commit()
+                        print("iddd",findTodo.id)
+                        for idx, item in enumerate(self.todos):
+                             if item == todo:
+                                 self.todos[idx].is_completed = not self.todos[idx].is_completed
+                                 break
+                        
 
 
     @rx.cached_var
