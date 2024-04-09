@@ -61,7 +61,16 @@ class State(rx.State):
                 ))
 
     def remove_todo(self, todo):
-        self.todos.remove(todo)
+        with rx.session() as session:
+            removeTodo = session.exec(
+                select(Todo).where(
+                    Todo.todo == todo["todo"]
+                )
+            ).first()
+            if(removeTodo):
+                 session.delete(removeTodo)
+                 session.commit()
+            self.todos.remove(todo)
 
     def toggle_completed(self, todo):
         # Find the index of the todo item in the list
