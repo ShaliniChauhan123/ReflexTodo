@@ -1,8 +1,8 @@
 import reflex as rx
 from sqlmodel import select
 
-from ..base_state import State
-from ..user import User
+from .base_state import State
+from .user import User
 class LoginState(State):
     """Handle login form submission and redirect to proper routes after authentication."""
 
@@ -42,7 +42,7 @@ class LoginState(State):
             # wait until after hydration to ensure auth_token is known
             return LoginState.redir()  # type: ignore
         page = self.router.page.path
-        print("page",page)
+
         if not self.is_authenticated and page != "/login":
             self.redirect_to = page
             return rx.redirect("/login")

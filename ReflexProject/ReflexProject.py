@@ -1,4 +1,4 @@
-from .pages.login import require_login
+from .login import require_login
 
 from .registration import registration_page as registration_page
 
