@@ -54,7 +54,11 @@ class State(rx.State):
                 )
             )
             session.commit()
-            self.todos.append({"text": new_item, "completed": False})
+            self.todos.append(                Todo(  # type: ignore
+                    user_id=user_id,
+                    todo=new_item,
+                    is_completed=False
+                ))
 
     def remove_todo(self, todo):
         self.todos.remove(todo)
